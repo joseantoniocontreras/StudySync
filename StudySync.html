@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7b4bc4">
+<title>StudySync — Organiza. Estudia. Logra.</title>
+<style>
+:root{--bg:#faf7ff;--card:#fff;--text:#241b38;--muted:#7e748b;--primary:#7b4bc4;--primary2:#a97ce2;--pink:#ee70a9;--line:#eadff4;--green:#43a86b;--danger:#d95570}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.app{max-width:1180px;min-height:100vh;margin:auto;display:grid;grid-template-columns:235px 1fr;background:var(--bg)}
+.sidebar{padding:26px 17px;border-right:1px solid var(--line);background:#fff;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:900;color:var(--primary);margin:0 9px 32px}.logo{width:42px;height:42px;border-radius:14px;background:#eee2ff;display:grid;place-items:center}
+.nav{display:flex;flex-direction:column;gap:7px}.nav button,.bottom button{border:0;background:transparent;color:#766d83;border-radius:14px;padding:13px 14px;text-align:left;display:flex;align-items:center;gap:11px}.nav button:hover,.nav button.active,.bottom button.active{background:#f0e6ff;color:var(--primary);font-weight:800}.navicon{width:23px;text-align:center;font-size:18px}
+.main{padding:28px 32px 42px;overflow:hidden}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.topbar h1{margin:0 0 5px;font-size:28px}.topbar p{margin:0;color:var(--muted)}.avatar{width:45px;height:45px;border-radius:50%;background:#f4d9eb;display:grid;place-items:center;font-size:23px}
+.mobilehead{display:none}.view{display:none}.view.active{display:block}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:21px;box-shadow:0 8px 24px rgba(84,50,120,.05)}
+.progress{background:linear-gradient(135deg,#efe5ff,#fff0f7)}.progressrow{display:flex;justify-content:space-between;align-items:flex-end}.big{font-size:45px;font-weight:900;color:var(--primary)}.bar{height:11px;background:#e8dfed;border-radius:99px;overflow:hidden;margin:11px 0}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--pink));border-radius:99px}
+.muted{color:var(--muted)}.sectiontitle{display:flex;justify-content:space-between;align-items:center;margin:23px 0 12px}.sectiontitle h2{font-size:19px;margin:0}.link{border:0;background:transparent;color:var(--primary);font-weight:800}
+.tasklist{display:flex;flex-direction:column;gap:10px}.task{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:16px;background:#fff}.check{width:23px;height:23px;border:2px solid #9c78ca;border-radius:7px;background:#fff;display:grid;place-items:center;flex:0 0 auto}.task.done .check{background:var(--primary);color:#fff}.task.done .check:after{content:"✓";font-weight:900}.task.done .tasktitle{text-decoration:line-through;color:#9991a4}.taskinfo{flex:1}.tasktitle{font-weight:800}.tasksub{font-size:12px;color:var(--muted);margin-top:3px}.badge{padding:6px 9px;border-radius:99px;font-size:11px;font-weight:900;background:#f0e6ff;color:var(--primary)}.badge.red{background:#ffe6eb;color:#c64d65}.badge.green{background:#e1f4e8;color:#328053}.badge.yellow{background:#fff1ca;color:#9c7409}
+.primary{border:0;background:linear-gradient(90deg,var(--primary),#9967d7);color:#fff;padding:12px 17px;border-radius:14px;font-weight:850;box-shadow:0 8px 18px rgba(123,75,196,.2)}.primary.full{width:100%}.secondary{border:1px solid var(--line);background:#fff;color:var(--primary);padding:10px 14px;border-radius:13px;font-weight:800}.actionrow{display:flex;gap:9px;flex-wrap:wrap}
+.exam{background:linear-gradient(135deg,#fff0f8,#f0e8ff)}.exam h3{margin:6px 0}.days{display:inline-block;margin-top:10px;padding:8px 11px;border-radius:12px;background:#e9dcff;color:var(--primary);font-weight:900}
+.petcard{background:linear-gradient(135deg,#e9ddff,#ffeaf5);text-align:center;overflow:hidden}.pet{font-size:96px;line-height:1;margin:5px auto 4px;filter:drop-shadow(0 9px 5px rgba(78,44,110,.15));animation:float 3s ease-in-out infinite}.pet.egg{font-size:85px}@keyframes float{50%{transform:translateY(-6px)}}.xpbar{height:9px;background:#e5dcec;border-radius:99px;overflow:hidden;margin:9px 0}.xpbar span{display:block;height:100%;background:linear-gradient(90deg,#7b4bc4,#ee70a9);border-radius:99px}.petstage{font-size:20px;font-weight:900}.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#fff8;color:var(--primary);font-size:11px;font-weight:900}
+.petactions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.petactions button{border:1px solid #e0d1ee;background:#fff;border-radius:13px;padding:9px 5px;color:var(--text);font-size:12px}.petactions button:hover{border-color:#b997df}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{border:1px solid var(--line);border-radius:16px;padding:15px;text-align:center}.stat b{display:block;color:var(--primary);font-size:24px}.stat span{font-size:11px;color:var(--muted)}
+.calendarhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}.calendarhead h2{margin:0}.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dow{text-align:center;color:var(--muted);font-size:12px;font-weight:900;padding:5px}.day{min-height:74px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:7px;cursor:pointer}.day:hover,.day.selected{background:#f0e6ff;border-color:#bd9ae5}.day.today{outline:2px solid var(--primary)}.day.mutedday{opacity:.4}.event{display:block;font-size:9px;color:var(--primary);font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:5px}
+.notes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.note{border:1px solid var(--line);border-radius:17px;padding:16px}.note h3{margin:5px 0}.note p{margin:0;color:var(--muted);white-space:pre-wrap;font-size:14px}
+.profilegrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.profilecard{text-align:center}.profileavatar{width:85px;height:85px;border-radius:28px;background:#eee2ff;margin:auto;display:grid;place-items:center;font-size:42px}.setting{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line)}.switch{width:45px;height:25px;border-radius:99px;background:#d7cedd;border:0;padding:3px}.switch i{display:block;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s}.switch.on{background:var(--primary)}.switch.on i{transform:translateX(20px)}
+.ai{background:linear-gradient(135deg,#eee5ff,#fff0f8)}textarea{width:100%;min-height:110px;resize:vertical;border:1px solid var(--line);border-radius:15px;padding:13px;outline:none}.plan{display:none;margin-top:15px}.plan.show{display:block}.planitem{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.planday{min-width:80px;font-weight:900;color:var(--primary)}
+.auth{min-height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(135deg,#f8efff,#fff0f7)}.authbox{width:min(430px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:0 20px 55px rgba(72,39,103,.12)}.authlogo{font-size:28px;font-weight:950;color:var(--primary);text-align:center}.authbox h1{margin:16px 0 7px;text-align:center}.form{display:grid;gap:12px;margin-top:18px}.form label{font-size:12px;font-weight:850}.form input,.form select{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px;outline:none}.form input:focus,textarea:focus{border-color:#b997df;box-shadow:0 0 0 3px #f0e6ff}.formrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.authswitch{border:0;background:transparent;color:var(--primary);font-weight:800;width:100%;margin-top:12px}.demo{margin-top:10px}
+.modal{position:fixed;inset:0;background:rgba(29,17,42,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.show{display:flex}.modalbox{width:min(480px,100%);background:#fff;border-radius:24px;padding:23px;box-shadow:0 25px 70px rgba(0,0,0,.25)}.modaltop{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#f3edf8;width:35px;height:35px;border-radius:10px}
+.toast{position:fixed;right:20px;bottom:20px;background:#241b38;color:#fff;padding:13px 16px;border-radius:13px;display:none;z-index:80}.toast.show{display:block}
+body.dark{--bg:#17131f;--card:#241d2e;--text:#f5effb;--muted:#b8adc2;--line:#3c304a}body.dark .sidebar,body.dark .task,body.dark .day,body.dark .note,body.dark .secondary,body.dark .modalbox,body.dark .authbox,body.dark .bottom button{background:#241d2e;color:var(--text)}body.dark .topbar .avatar,body.dark .avatar{background:#4a3154}body.dark .progress{background:#30233e}
+.bottom{display:none}
+@media(max-width:780px){.app{display:block}.sidebar{display:none}.main{padding:18px 14px 88px}.mobilehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.mobilebrand{font-weight:950;color:var(--primary);font-size:21px}.topbar{display:none}.grid,.profilegrid{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.pet{font-size:82px}.cal{gap:4px}.day{min-height:58px;padding:5px}.event{font-size:8px}.bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:30}.bottom button{display:block;text-align:center;padding:8px 2px;border-radius:0;font-size:10px}.bottom .navicon{display:block;width:auto;font-size:18px;margin-bottom:2px}.petactions button{font-size:11px}.formrow{grid-template-columns:1fr}.statgrid{gap:6px}}
+</style>
+</head>
+<body>
+
+<div id="authScreen" class="auth hidden">
+  <div class="authbox">
+    <div class="authlogo">📖 StudySync</div>
+    <h1 id="authTitle">Bienvenida 💜</h1>
+    <p id="authSubtitle" class="muted" style="text-align:center">Inicia sesión para guardar tu progreso.</p>
+    <form id="authForm" class="form">
+      <div><label>Correo electrónico</label><input id="authEmail" type="email" required placeholder="tu@email.com"></div>
+      <div><label>Contraseña</label><input id="authPassword" type="password" minlength="6" required placeholder="Mínimo 6 caracteres"></div>
+      <div id="nameField"><label>Nombre</label><input id="authName" placeholder="¿Cómo quieres que te llamemos?"></div>
+      <button class="primary full" id="authSubmit">Crear mi cuenta</button>
+    </form>
+    <button class="authswitch" id="authSwitch">Ya tengo una cuenta → Iniciar sesión</button>
+    <button class="secondary full demo" id="demoBtn">Entrar en modo demo</button>
+    <p id="authStatus" class="muted" style="font-size:12px;text-align:center;margin-bottom:0"></p>
+  </div>
+</div>
+
+<div id="appShell" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">📖</div>StudySync</div>
+    <nav class="nav">
+      <button class="active" data-view="home"><span class="navicon">⌂</span>Inicio</button>
+      <button data-view="tasks"><span class="navicon">✓</span>Tareas</button>
+      <button data-view="calendar"><span class="navicon">▣</span>Calendario</button>
+      <button data-view="notes"><span class="navicon">▤</span>Apuntes</button>
+      <button data-view="profile"><span class="navicon">♙</span>Perfil</button>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="mobilehead"><div class="mobilebrand">📖 StudySync</div><div class="avatar">🐢</div></div>
+    <div class="topbar"><div><h1 id="pageTitle">¡Hola! 👋</h1><p id="pageSubtitle">Vamos a hacer que hoy sea productivo ✨</p></div><div class="avatar">🐢</div></div>
+
+    <section id="home" class="view active">
+      <div class="grid">
+        <div>
+          <div class="card progress">
+            <div class="progressrow"><div><div class="muted">Tu progreso esta semana</div><div class="big" id="progressNumber">0%</div></div><div style="font-size:43px">🏆</div></div>
+            <div class="bar"><span id="progressBar" style="width:0%"></span></div>
+            <div class="muted" id="progressText">0 tareas completadas · 🔥 0 días de racha</div>
+          </div>
+          <div class="sectiontitle"><h2>Tareas de hoy</h2><button class="link" onclick="showView('tasks')">Ver todas →</button></div>
+          <div class="tasklist" id="homeTasks"></div>
+        </div>
+        <div>
+          <div class="card petcard">
+            <div class="muted">🐢 Tu mascota</div>
+            <div id="petEmoji" class="pet egg">🥚</div>
+            <div id="petStage" class="petstage">Huevo</div>
+            <div class="pill" id="petXpText">0 / 100 XP</div>
+            <div class="xpbar"><span id="petXpBar" style="width:0%"></span></div>
+            <div class="muted" id="petNext">Completa actividades para hacerla crecer.</div>
+            <div class="petactions">
+              <button onclick="earnXp(20,'Pomodoro')">🍅<br>Pomodoro</button>
+              <button onclick="earnXp(30,'Misión')">🎯<br>Misión</button>
+              <button onclick="earnXp(5,'Estudio')">📚<br>Estudiar</button>
+            </div>
+          </div>
+          <div class="card exam" style="margin-top:15px"><div class="muted">📅 Próximo evento</div><h3>Examen de Matemática</h3><div class="muted">Viernes, 14 de agosto</div><div class="days">⏱ 4 días restantes</div></div>
+          <button class="primary full" style="margin-top:15px" onclick="openTaskModal()">＋ Agregar tarea</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tasks" class="view">
+      <div class="card"><div class="sectiontitle" style="margin-top:0"><h2>Mis tareas</h2><button class="primary" onclick="openTaskModal()">＋ Nueva tarea</button></div>
+        <div class="actionrow" style="margin-bottom:15px"><button class="secondary" onclick="renderTasks('all')">Todas</button><button class="secondary" onclick="renderTasks('pending')">Pendientes</button><button class="secondary" onclick="renderTasks('done')">Completadas</button></div>
+        <div class="tasklist" id="allTasks"></div>
+      </div>
+    </section>
+
+    <section id="calendar" class="view">
+      <div class="card"><div class="calendarhead"><button class="secondary" onclick="changeMonth(-1)">←</button><h2 id="monthLabel">Agosto 2026</h2><button class="secondary" onclick="changeMonth(1)">→</button></div>
+        <div class="cal" id="calendarGrid"></div>
+        <div id="selectedEvent" class="card hidden" style="margin-top:15px;background:#f5edff"></div>
+        <button class="primary full" style="margin-top:15px" onclick="openTaskModal(selectedCalendarDate || undefined)">＋ Agregar tarea a una fecha</button>
+      </div>
+    </section>
+
+    <section id="notes" class="view"><div class="card"><div class="sectiontitle" style="margin-top:0"><h2>Mis apuntes</h2><button class="primary" onclick="addNote()">＋ Nuevo apunte</button></div><div class="notes" id="notesGrid"></div></div></section>
+
+    <section id="profile" class="view">
+      <div class="profilegrid">
+        <div class="card profilecard"><div class="profileavatar">🐢</div><h2 id="profileName">Estudiante</h2><p class="muted" id="profileEmail">—</p><div class="statgrid"><div class="stat"><b id="statProgress">0%</b><span>Progreso</span></div><div class="stat"><b id="statDone">0</b><span>Completadas</span></div><div class="stat"><b id="statXp">0</b><span>XP</span></div></div></div>
+        <div class="card"><h2 style="margin-top:0">⚙️ Configuración</h2>
+          <div class="setting"><div><b>Nombre</b><div class="muted" style="font-size:12px">Cómo te verá StudySync</div></div><button class="secondary" onclick="editName()">Editar</button></div>
+          <div class="setting"><div><b>🌙 Modo oscuro</b><div class="muted" style="font-size:12px">Cambia la apariencia</div></div><button id="themeSwitch" class="switch" onclick="toggleTheme()"><i></i></button></div>
+          <div class="setting"><div><b>🔔 Recordatorios</b><div class="muted" style="font-size:12px">Preferencia de notificaciones</div></div><button id="notifSwitch" class="switch on" onclick="toggleNotifications()"><i></i></button></div>
+          <div class="setting"><div><b>📧 Cuenta</b><div class="muted" id="accountMode">Firebase</div></div><button class="secondary" onclick="logout()">Cerrar sesión</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai" class="view"><div class="card ai"><h2>🤖 Planificación inteligente</h2><p class="muted">Escribe tus pendientes y StudySync te muestra un ejemplo de plan.</p><textarea id="aiInput" placeholder="Ej.: Tengo examen el viernes y me faltan 3 temas de Matemática."></textarea><button class="primary full" style="margin-top:10px" onclick="makePlan()">✨ Crear mi plan</button>
+      <div class="plan" id="plan"><h3>Tu plan de estudio</h3><div class="planitem"><div class="planday">Lunes</div><div>📐 Tema 1 · 30 min</div></div><div class="planitem"><div class="planday">Martes</div><div>📐 Tema 2 · 30 min</div></div><div class="planitem"><div class="planday">Miércoles</div><div>📐 Tema 3 · 45 min</div></div><div class="planitem"><div class="planday">Jueves</div><div>🔄 Repaso general · 40 min</div></div><div class="planitem"><div class="planday">Viernes</div><div>🎯 Examen — ¡Tú puedes!</div></div></div>
+    </div></section>
+  </main>
+</div>
+
+<nav class="bottom">
+  <button class="active" data-view="home"><span class="navicon">⌂</span>Inicio</button><button data-view="tasks"><span class="navicon">✓</span>Tareas</button><button data-view="calendar"><span class="navicon">▣</span>Calendario</button><button data-view="notes"><span class="navicon">▤</span>Apuntes</button><button data-view="profile"><span class="navicon">♙</span>Perfil</button>
+</nav>
+
+<div id="taskModal" class="modal"><div class="modalbox"><div class="modaltop"><h2 style="margin:0">Nueva tarea ✨</h2><button class="close" onclick="closeTaskModal()">✕</button></div>
+<form id="taskForm" class="form"><div><label>Nombre</label><input id="taskName" required placeholder="Ej. Terminar presentación"></div><div class="formrow"><div><label>Materia</label><input id="taskSubject" required placeholder="Informática"></div><div><label>Fecha</label><input id="taskDate" type="date" required></div></div><button class="primary full" type="submit">Guardar tarea</button></form></div></div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, addDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+/* =========================================================
+   FIREBASE: pega aquí el objeto que Firebase Console te dará.
+   Mientras tenga REEMPLAZAR_..., StudySync funciona en modo demo.
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "REEMPLAZAR_API_KEY",
+  authDomain: "REEMPLAZAR_PROJECT.firebaseapp.com",
+  projectId: "REEMPLAZAR_PROJECT_ID",
+  storageBucket: "REEMPLAZAR_PROJECT.firebasestorage.app",
+  messagingSenderId: "REEMPLAZAR_SENDER_ID",
+  appId: "REEMPLAZAR_APP_ID"
+};
+const firebaseReady = Object.values(firebaseConfig).every(v => v && !String(v).includes("REEMPLAZAR_"));
+
+let auth=null, db=null, firebaseUser=null, demoMode=false;
+if(firebaseReady){
+  const app=initializeApp(firebaseConfig); auth=getAuth(app); db=getFirestore(app);
+}else{
+  demoMode=true;
+}
+
+const defaultDemo={tasks:[],notes:[],pet:{xp:0,stage:0},settings:{name:"Angy",dark:false,notifications:true}};
+let state=structuredClone(defaultDemo), unsubTasks=null, unsubNotes=null, unsubPet=null, unsubProfile=null;
+let selectedCalendarDate=null, calDate=new Date(), authMode="signup";
+
+const stages=[
+ {name:"Huevo",min:0,max:99,emoji:"🥚"},
+ {name:"Cría",min:100,max:249,emoji:"🐢"},
+ {name:"Juvenil",min:250,max:499,emoji:"🐢💚"},
+ {name:"Adolescente",min:500,max:799,emoji:"🐢🎒"},
+ {name:"Adulta / Maestra",min:800,max:Infinity,emoji:"🐢👑"}
+];
+const titles={home:["¡Hola! 👋","Vamos a hacer que hoy sea productivo ✨"],tasks:["Mis tareas","Organiza todo en un solo lugar."],calendar:["Mi calendario","Mira todo lo que viene."],notes:["Mis apuntes","Todo tu conocimiento, organizado."],profile:["Mi perfil","Tu progreso, a tu ritmo."],ai:["Planificación inteligente 🤖","Convierte tus pendientes en un plan."]};
+
+function $(id){return document.getElementById(id)}
+function todayISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function dateText(ds){if(!ds)return"";const [y,m,d]=ds.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("es-PE",{day:"numeric",month:"long"})}
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>$("toast").classList.remove("show"),2200)}
+
+function setAuthUI(show){
+  $("authScreen").classList.toggle("hidden",!show); $("appShell").classList.toggle("hidden",show);
+}
+function authError(e){const map={"auth/email-already-in-use":"Ese correo ya tiene una cuenta.","auth/invalid-credential":"Correo o contraseña incorrectos.","auth/weak-password":"La contraseña debe tener al menos 6 caracteres.","auth/invalid-email":"El correo no es válido."};return map[e.code]||e.message||"No se pudo completar la acción."}
+
+$("authSwitch").onclick=()=>{authMode=authMode==="signup"?"login":"signup";$("authTitle").textContent=authMode==="signup"?"Bienvenida 💜":"Qué bueno verte otra vez 👋";$("authSubtitle").textContent=authMode==="signup"?"Crea tu cuenta y empieza desde cero.":"Inicia sesión para recuperar tu progreso."; $("nameField").classList.toggle("hidden",authMode==="login");$("authSubmit").textContent=authMode==="signup"?"Crear mi cuenta":"Iniciar sesión";$("authSwitch").textContent=authMode==="signup"?"Ya tengo una cuenta → Iniciar sesión":"No tengo cuenta → Crear una"};
+$("authForm").onsubmit=async e=>{
+ e.preventDefault();$("authStatus").textContent="Conectando...";
+ try{
+   const email=$("authEmail").value.trim(),pass=$("authPassword").value;
+   if(authMode==="signup"){
+     const cred=await createUserWithEmailAndPassword(auth,email,pass);
+     const name=$("authName").value.trim()||"Estudiante";
+     await updateProfile(cred.user,{displayName:name});
+     await setDoc(doc(db,"users",cred.user.uid),{name,email,createdAt:serverTimestamp(),settings:{dark:false,notifications:true}},{merge:true});
+     await setDoc(doc(db,"users",cred.user.uid,"pet","main"),{xp:0,stage:0,updatedAt:serverTimestamp()},{merge:true});
+   }else await signInWithEmailAndPassword(auth,email,pass);
+ }catch(err){$("authStatus").textContent=authError(err)}
+};
+$("demoBtn").onclick=()=>{demoMode=true;state=structuredClone(defaultDemo);state.settings.name="Angy";startApp({uid:"demo",displayName:"Angy",email:"modo-demo"});toast("Modo demo: los datos son solo de este navegador.")};
+
+if(firebaseReady){
+ onAuthStateChanged(auth,user=>{
+   if(user){firebaseUser=user;startApp(user)}
+   else {firebaseUser=null;setAuthUI(true)}
+ });
+}else{
+ $("authSubtitle").textContent="Firebase aún no está conectado. Puedes probar la interfaz primero.";
+ $("authSwitch").classList.add("hidden"); $("authForm").classList.add("hidden");
+ $("demoBtn").classList.remove("hidden");
+ setAuthUI(true);
+}
+
+function startApp(user){
+ setAuthUI(false);
+ $("profileEmail").textContent=user.email||"Modo demo";
+ $("accountMode").textContent=demoMode?"Modo demo":"Firebase + Firestore";
+ if(user.displayName)state.settings.name=user.displayName;
+ loadLocalSettings();
+ applySettings();
+ if(demoMode){renderAll()}
+ else subscribeFirebase(user.uid);
+}
+
+function loadLocalSettings(){const saved=JSON.parse(localStorage.getItem("studysync_settings")||"null");if(saved)state.settings={...state.settings,...saved}}
+function applySettings(){
+ document.body.classList.toggle("dark",!!state.settings.dark);
+ $("themeSwitch").classList.toggle("on",!!state.settings.dark);
+ $("notifSwitch").classList.toggle("on",state.settings.notifications!==false);
+ $("profileName").textContent=state.settings.name||"Estudiante";
+ $("pageTitle").textContent=`¡Hola, ${state.settings.name||"Estudiante"}! 👋`;
+}
+
+async function subscribeFirebase(uid){
+ unsubTasks?.();unsubNotes?.();unsubPet?.();unsubProfile?.();
+ const tq=query(collection(db,"users",uid,"tasks"),orderBy("date"));
+ unsubTasks=onSnapshot(tq,snap=>{state.tasks=snap.docs.map(d=>({id:d.id,...d.data()}));renderAll()},e=>toast("No se pudieron cargar las tareas: "+e.message));
+ unsubNotes=onSnapshot(collection(db,"users",uid,"notes"),snap=>{state.notes=snap.docs.map(d=>({id:d.id,...d.data()}));renderNotes()},e=>toast("No se pudieron cargar los apuntes."));
+ unsubPet=onSnapshot(doc(db,"users",uid,"pet","main"),snap=>{state.pet=snap.exists()?snap.data():{xp:0,stage:0};renderPet();updateStats()},e=>toast("No se pudo cargar la mascota."));
+ unsubProfile=onSnapshot(doc(db,"users",uid),snap=>{
+   if(snap.exists()){const d=snap.data();state.settings={...state.settings,...(d.settings||{}),name:d.name||firebaseUser?.displayName||"Estudiante"};applySettings()}
+ });
+}
+
+function renderAll(){renderHome();renderTasks();renderCalendar();renderNotes();renderPet();updateStats();applySettings()}
+function showView(id){
+ document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));$(id).classList.add("active");
+ document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
+ $("pageTitle").textContent=titles[id]?.[0]||"StudySync";$("pageSubtitle").textContent=titles[id]?.[1]||"";
+ window.scrollTo({top:0,behavior:"smooth"}); if(id==="calendar")renderCalendar();
+}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+
+function taskHTML(t){
+ const label=t.done?"Completada":t.date===todayISO()?"Hoy":dateText(t.date);
+ const cls=t.done?"green":t.date===todayISO()?"red":"yellow";
+ return `<div class="task ${t.done?"done":""}" onclick="toggleTask('${t.id}')"><div class="check"></div><div class="taskinfo"><div class="tasktitle">${escapeHtml(t.title)}</div><div class="tasksub">${escapeHtml(t.subject)} · ${dateText(t.date)}</div></div><span class="badge ${cls}">${label}</span></div>`
+}
+function renderHome(){const list=(state.tasks||[]).filter(t=>t.date===todayISO()).slice(0,4);$("homeTasks").innerHTML=list.length?list.map(taskHTML).join(""):"<div class='muted'>🎉 No tienes tareas para hoy.</div>"}
+function renderTasks(filter="all"){let list=state.tasks||[];if(filter==="done")list=list.filter(t=>t.done);if(filter==="pending")list=list.filter(t=>!t.done);$("allTasks").innerHTML=list.length?list.map(taskHTML).join(""):"<div class='muted'>No hay tareas aquí todavía.</div>";renderHome();updateStats()}
+function updateStats(){const list=state.tasks||[],done=list.filter(t=>t.done).length,total=list.length,pct=total?Math.round(done/total*100):0;$("progressNumber").textContent=pct+"%";$("progressBar").style.width=pct+"%";$("progressText").textContent=`Has completado ${done} de ${total} tareas · 🔥 ${Math.min(done,5)} días de racha`;$("statProgress").textContent=pct+"%";$("statDone").textContent=done;$("statXp").textContent=state.pet?.xp||0}
+async function toggleTask(id){
+ const t=state.tasks.find(x=>x.id===id);if(!t)return;t.done=!t.done;
+ if(!t.done && t.xpAwarded){t.xpAwarded=false;await changeXp(-10)}
+ else if(t.done&&!t.xpAwarded){t.xpAwarded=true;await changeXp(10)}
+ if(demoMode){renderAll();saveDemo()}else{await setDoc(doc(db,"users",firebaseUser.uid,"tasks",id),t,{merge:true})}
+ toast(t.done?"¡Tarea completada! +10 XP 🎉":"Tarea pendiente.")
+}
+function openTaskModal(date){$("taskModal").classList.add("show");$("taskDate").value=date||selectedCalendarDate||todayISO();$("taskName").focus()}
+function closeTaskModal(){$("taskModal").classList.remove("show")}
+$("taskForm").onsubmit=async e=>{
+ e.preventDefault();const t={title:$("taskName").value.trim(),subject:$("taskSubject").value.trim(),date:$("taskDate").value,done:false,xpAwarded:false,createdAt:Date.now()};
+ if(demoMode){t.id=crypto.randomUUID();state.tasks.push(t);saveDemo();renderAll()}else{await addDoc(collection(db,"users",firebaseUser.uid,"tasks"),t)}
+ e.target.reset();closeTaskModal();toast("Tarea agregada ✨")
+};
+
+function renderCalendar(){
+ const y=calDate.getFullYear(),m=calDate.getMonth(),first=new Date(y,m,1).getDay(),offset=(first+6)%7,days=new Date(y,m+1,0).getDate();
+ $("monthLabel").textContent=new Date(y,m,1).toLocaleDateString("es-PE",{month:"long",year:"numeric"}).replace(/^./,c=>c.toUpperCase());
+ let html=["L","M","X","J","V","S","D"].map(x=>`<div class="dow">${x}</div>`).join("");
+ const prev=new Date(y,m,0).getDate();for(let i=0;i<offset;i++)html+=`<div class="day muteday"><b>${prev-offset+i+1}</b></div>`;
+ for(let d=1;d<=days;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=(state.tasks||[]).filter(t=>t.date===ds);html+=`<div class="day ${ds===todayISO()?"today":""} ${ds===selectedCalendarDate?"selected":""}" onclick="selectDate('${ds}')"><b>${d}</b>${ev.slice(0,3).map(x=>`<span class="event">• ${escapeHtml(x.subject)}: ${escapeHtml(x.title)}</span>`).join("")}</div>`}
+ $("calendarGrid").innerHTML=html
+}
+function changeMonth(n){calDate.setMonth(calDate.getMonth()+n);renderCalendar()}
+function selectDate(ds){selectedCalendarDate=ds;const ev=(state.tasks||[]).filter(t=>t.date===ds),box=$("selectedEvent");box.classList.remove("hidden");box.innerHTML=`<b>📅 ${dateText(ds)}</b><br><br>`+(ev.length?ev.map(x=>`${x.done?"☑":"☐"} ${escapeHtml(x.title)} — ${escapeHtml(x.subject)}`).join("<br>"):"<span class='muted'>No hay tareas programadas.</span>");renderCalendar()}
+
+function renderNotes(){$("notesGrid").innerHTML=(state.notes||[]).length?state.notes.map(n=>`<div class="note"><div class="muted">${escapeHtml(n.subject||"General")}</div><h3>${escapeHtml(n.title)}</h3><p>${escapeHtml(n.text||"")}</p><button class="link" style="padding:0;margin-top:10px" onclick="deleteNote('${n.id}')">Eliminar</button></div>`).join(""):"<div class='muted'>📝 Todavía no tienes apuntes.</div>"}
+async function addNote(){const title=prompt("Título del apunte:");if(!title)return;const subject=prompt("Materia:")||"General",text=prompt("Contenido:")||"";const n={title,subject,text,createdAt:Date.now()};if(demoMode){n.id=crypto.randomUUID();state.notes.push(n);saveDemo();renderNotes()}else await addDoc(collection(db,"users",firebaseUser.uid,"notes"),n);toast("Apunte guardado 📝")}
+async function deleteNote(id){if(!confirm("¿Eliminar este apunte?"))return;if(demoMode){state.notes=state.notes.filter(n=>n.id!==id);saveDemo();renderNotes()}else await deleteDoc(doc(db,"users",firebaseUser.uid,"notes",id));toast("Apunte eliminado.")}
+
+function stageForXP(xp){let s=stages[0];for(const x of stages)if(xp>=x.min)s=x;return s}
+function renderPet(){const xp=Number(state.pet?.xp||0),s=stageForXP(xp),next=stages[stages.indexOf(s)+1];$("petEmoji").textContent=s.emoji;$("petStage").textContent=s.name;const base=s.min,nextMin=next?next.min:s.min+500,progress=next?Math.min(100,Math.round((xp-base)/(nextMin-base)*100)):100;$("petXpText").textContent=next?`${xp} / ${nextMin} XP`:`${xp} XP · Máximo nivel`;$("petXpBar").style.width=progress+"%";$("petNext").textContent=next?`Faltan ${Math.max(0,nextMin-xp)} XP para ${next.name}.`:"¡Tu tortuga es una Maestra! 👑";$("statXp").textContent=xp}
+async function changeXp(amount){
+ const old=Number(state.pet?.xp||0),xp=Math.max(0,old+amount),oldStage=stageForXP(old).name,newStage=stageForXP(xp).name;state.pet={...(state.pet||{}),xp,stage:stages.findIndex(s=>s.name===newStage)};renderPet();updateStats();
+ if(demoMode){saveDemo()}else await setDoc(doc(db,"users",firebaseUser.uid,"pet","main"),{xp,stage:state.pet.stage,updatedAt:serverTimestamp()},{merge:true});
+ if(oldStage!==newStage)toast(`🐢 ¡Tu mascota evolucionó a ${newStage}!`);
+}
+async function earnXp(amount,reason){await changeXp(amount);toast(`+${amount} XP por ${reason} ✨`)}
+
+function saveDemo(){sessionStorage.setItem("studysync_demo_state",JSON.stringify(state))}
+function loadDemo(){const saved=JSON.parse(sessionStorage.getItem("studysync_demo_state")||"null");if(saved)state=saved}
+function toggleTheme(){state.settings.dark=!state.settings.dark;saveSettings();applySettings()}
+function toggleNotifications(){state.settings.notifications=state.settings.notifications===false;saveSettings();applySettings()}
+async function saveSettings(){localStorage.setItem("studysync_settings",JSON.stringify(state.settings));if(!demoMode&&firebaseUser)await setDoc(doc(db,"users",firebaseUser.uid),{name:state.settings.name,settings:{dark:state.settings.dark,notifications:state.settings.notifications}},{merge:true})}
+async function editName(){const name=prompt("¿Cómo quieres que te llamemos?",state.settings.name||"Estudiante");if(!name?.trim())return;state.settings.name=name.trim();saveSettings();applySettings();if(!demoMode&&firebaseUser)await updateProfile(firebaseUser,{displayName:state.settings.name});toast("Nombre actualizado 💜")}
+async function logout(){if(demoMode){sessionStorage.removeItem("studysync_demo_state");location.reload();return}await signOut(auth)}
+function makePlan(){if(!$("aiInput").value.trim()){toast("Escribe primero qué tienes que estudiar ✨");return}$("plan").classList.add("show");toast("Plan creado 🤖")}
+
+/* Exponemos en window las funciones que se llaman desde atributos onclick="" del HTML.
+   Dentro de un <script type="module"> las declaraciones NO son globales por defecto,
+   por eso los botones no respondían: el navegador no encontraba las funciones. */
+Object.assign(window, {
+  showView, closeTaskModal, openTaskModal, earnXp, renderTasks, changeMonth,
+  selectDate, addNote, deleteNote, toggleTask, editName, toggleTheme,
+  toggleNotifications, logout, makePlan
+});
+
+if(demoMode){loadDemo();setAuthUI(true)}
+</script>
+</body>
+</html>
